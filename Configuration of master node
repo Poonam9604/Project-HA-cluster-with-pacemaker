@@ -1,0 +1,86 @@
+#### Enter all node's hostname and ip adderess######
+vi /etc/hosts
+uname -a
+yum install iscsi-initiator-utils lvm2
+cat /etc/iscsi/initiatorname.iscsi
+iscsiadm -m discovery -t st -p 192.168.144.236
+iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.iscsi.x8664:sn.21f2f1d90530 192.168.144.236 -l
+lsblk
+pvcreate /dev/sdb
+vgcreate vg_apache /dev/sdb
+lvcreate -n lv_apache -l 100%FREE vg_apache
+mkfs.ext4 /dev/vg_apache/lv_apache
+lsblk
+yum config-manager --set-enabled HighAvailability
+yum config-manager --set-enabled highavailability
+vi /etc/yum.repos.d/CentOS-PowerTools.repo
+/etc/yum.repos.d/CentOS-PowerTools.repo
+vi /etc/yum.repos.d/CentOS-HighAvailability.repo
+yum-config-manager --enable HighAvailability
+yum-config-manager --enable HighAvailability
+yum install yum-utils
+yum-config-manager --enable HighAvailability
+yum install -y pcs fence-agents-all pcp-zeroconf
+firewall-cmd --permanent -add-service=high-availability
+systemctl status firewalld
+firewall-cmd --permanent -add-service=high-availability
+firewall-cmd --permanent --add-service=high-availability
+firewall-cmd --add-service=high-availability
+firewall-cmd --reload
+passwd hacluster
+systemctl start pcsd
+systemctl enable pcsd
+pcs host auth node1.lab node2.lab
+systemctl status pcsd
+pcs host auth node1.lab node2.lab
+pcs cluster auth node1.lab node2.lab
+pcs cluster setup raj_cluster --start node1.lab node2.lab
+pcs cluster setup --name raj_cluster --start node1.lab node2.lab
+systemctl status pcsd
+lsblk
+pcs cluster setup raj_cluster --start node1.lab node2.lab
+pcs cluster enable --all
+pcs cluster status
+pcs status
+pcs property set stonith-enabled=false
+yum install -y httpd
+vi /etc/httpd/conf/httpd.conf
+/bin/systemctl reload httpd.service > /dev/null 2>/dev/null || true
+/usr/sbin/httpd -f /etc/httpd/conf/httpd.conf -c "PidFile /var/run/httpd.pid" -k graceful > /dev/null 2>/dev/null || true
+mount /dev/vg_apache/lv_apache /var/www/
+mkdir /var/www/html
+mkdir /var/www/cgi-bin
+mkdir /var/www/error
+restorecon -R /var/www
+cat <<-END >/var/www/html/index.html
+<html>
+<body>Hello, welcome!. This page is served by Red Hat High Availability cluster</body>
+</html>
+END
+cat /var/www/html/index.html
+umount /var/www
+firewall-cmd --permanent --add-service=http
+firewall-cmd --reload
+pcs resource create httpd_fs Filesystem device="/dev/mapper/vg_apache-lv_a pache" directory="/var/www" fstype="ext4" --group apache
+pcs resource create httpd_ft Filesystem device="/dev/mapper/vg_apache-lv_a pache" directory="/var/www" fstype="ext4" --group apache
+pcs resource create httpd_vip IPaddr2 ip=192.168.144.239 cidr_netmask=24 --group apache
+pcs resource create httpd_ser apache configfile="/etc/httpd/conf/httpd.conf" 
+statusurl="http://127.0.0.1/server-status" --group apache
+pcs status
+pcs node standby node1.lab
+pcs status
+pcs cluster start raj_cluster
+pcs cluster start node1.lab
+pcs status
+pcs cluster start --all
+pcs status
+pcs resource create httpd_ft Filesystem device="/dev/mapper/vg_apache-lv_a pache" directory="/var/www" fstype="ext4" --group apache
+pcs status
+pcs node start node1.lab node2.lab
+pcs node unstandby node1.lab
+pcs status
+ip a
+pcs status
+pcs cluster status
+pcs status
+pcs quorum status
