@@ -1,44 +1,47 @@
 #### Enter all node's hostname and ip adderess######
 vi /etc/hosts
 uname -a
+#### To create database####
 yum install iscsi-initiator-utils lvm2
 cat /etc/iscsi/initiatorname.iscsi
 iscsiadm -m discovery -t st -p 192.168.144.236
 iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.iscsi.x8664:sn.21f2f1d90530 192.168.144.236 -l
 lsblk
+#### create volumes####
 pvcreate /dev/sdb
 vgcreate vg_apache /dev/sdb
 lvcreate -n lv_apache -l 100%FREE vg_apache
 mkfs.ext4 /dev/vg_apache/lv_apache
 lsblk
-yum config-manager --set-enabled HighAvailability
-yum config-manager --set-enabled highavailability
-vi /etc/yum.repos.d/CentOS-PowerTools.repo
-/etc/yum.repos.d/CentOS-PowerTools.repo
-vi /etc/yum.repos.d/CentOS-HighAvailability.repo
-yum-config-manager --enable HighAvailability
-yum-config-manager --enable HighAvailability
+#yum config-manager --set-enabled HighAvailability
+#yum config-manager --set-enabled highavailability
+#vi /etc/yum.repos.d/CentOS-PowerTools.repo
+#/etc/yum.repos.d/CentOS-PowerTools.repo
+#vi /etc/yum.repos.d/CentOS-HighAvailability.repo
+#yum-config-manager --enable HighAvailability
+#yum-config-manager --enable HighAvailability
+### Configuration of pacemaker ######
 yum install yum-utils
 yum-config-manager --enable HighAvailability
 yum install -y pcs fence-agents-all pcp-zeroconf
 firewall-cmd --permanent -add-service=high-availability
 systemctl status firewalld
-firewall-cmd --permanent -add-service=high-availability
+#firewall-cmd --permanent -add-service=high-availability
 firewall-cmd --permanent --add-service=high-availability
 firewall-cmd --add-service=high-availability
 firewall-cmd --reload
 passwd hacluster
 systemctl start pcsd
 systemctl enable pcsd
-pcs host auth node1.lab node2.lab
-systemctl status pcsd
-pcs host auth node1.lab node2.lab
+#pcs host auth node1.lab node2.lab
+#systemctl status pcsd
+#pcs host auth node1.lab node2.lab
 pcs cluster auth node1.lab node2.lab
-pcs cluster setup raj_cluster --start node1.lab node2.lab
+#pcs cluster setup raj_cluster --start node1.lab node2.lab
 pcs cluster setup --name raj_cluster --start node1.lab node2.lab
 systemctl status pcsd
 lsblk
-pcs cluster setup raj_cluster --start node1.lab node2.lab
+#pcs cluster setup raj_cluster --start node1.lab node2.lab
 pcs cluster enable --all
 pcs cluster status
 pcs status
