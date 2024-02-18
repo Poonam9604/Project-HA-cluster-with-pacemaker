@@ -4,8 +4,8 @@ uname -a
 #### To create common database####
 yum install iscsi-initiator-utils lvm2
 cat /etc/iscsi/initiatorname.iscsi
-iscsiadm -m discovery -t st -p 192.168.144.236
-iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.iscsi.x8664:sn.21f2f1d90530 192.168.144.236 -l
+iscsiadm -m discovery -t st -p 192.168.144.236  ##<Give target ip>###
+iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.iscsi.x8664:sn.21f2f1d90530 192.168.144.236 -l #####<Give target iqn>###
 lsblk
 #### create volumes####
 pvcreate /dev/sdb
@@ -24,7 +24,7 @@ lsblk
 yum install yum-utils
 yum-config-manager --enable HighAvailability
 yum install -y pcs fence-agents-all pcp-zeroconf
-firewall-cmd --permanent -add-service=high-availability
+#firewall-cmd --permanent -add-service=high-availability
 systemctl status firewalld
 #firewall-cmd --permanent -add-service=high-availability
 firewall-cmd --permanent --add-service=high-availability
@@ -56,28 +56,27 @@ mkdir /var/www/cgi-bin
 mkdir /var/www/error
 restorecon -R /var/www
 cat <<-END >/var/www/html/index.html
-<html>
-<body>Hello, welcome!. This page is served by Red Hat High Availability cluster</body>
-</html>
-END
+#<html>
+#<body>Hello, welcome!. This page is served by Red Hat High Availability cluster</body>
+#</html>
+#END
 cat /var/www/html/index.html
 umount /var/www
 firewall-cmd --permanent --add-service=http
 firewall-cmd --reload
 pcs resource create httpd_fs Filesystem device="/dev/mapper/vg_apache-lv_a pache" directory="/var/www" fstype="ext4" --group apache
-pcs resource create httpd_ft Filesystem device="/dev/mapper/vg_apache-lv_a pache" directory="/var/www" fstype="ext4" --group apache
+#pcs resource create httpd_ft Filesystem device="/dev/mapper/vg_apache-lv_a pache" directory="/var/www" fstype="ext4" --group apache
 pcs resource create httpd_vip IPaddr2 ip=192.168.144.239 cidr_netmask=24 --group apache
-pcs resource create httpd_ser apache configfile="/etc/httpd/conf/httpd.conf" 
-statusurl="http://127.0.0.1/server-status" --group apache
+pcs resource create httpd_ser apache configfile="/etc/httpd/conf/httpd.conf" statusurl="http://127.0.0.1/server-status" --group apache
 pcs status
 pcs node standby node1.lab
 pcs status
-pcs cluster start raj_cluster
+#pcs cluster start raj_cluster
 pcs cluster start node1.lab
 pcs status
 pcs cluster start --all
 pcs status
-pcs resource create httpd_ft Filesystem device="/dev/mapper/vg_apache-lv_a pache" directory="/var/www" fstype="ext4" --group apache
+#pcs resource create httpd_ft Filesystem device="/dev/mapper/vg_apache-lv_a pache" directory="/var/www" fstype="ext4" --group apache
 pcs status
 pcs node start node1.lab node2.lab
 pcs node unstandby node1.lab
