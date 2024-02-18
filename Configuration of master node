@@ -1,7 +1,7 @@
 #### Enter all node's hostname and ip adderess######
 vi /etc/hosts
 uname -a
-#### To create database####
+#### To create common database####
 yum install iscsi-initiator-utils lvm2
 cat /etc/iscsi/initiatorname.iscsi
 iscsiadm -m discovery -t st -p 192.168.144.236
