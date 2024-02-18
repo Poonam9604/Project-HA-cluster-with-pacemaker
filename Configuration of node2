@@ -1,0 +1,64 @@
+[root@node2 ~]# history
+    1  vi /etc/hosts
+    2  yum install iscsi-initiator-utils lvm2
+    3  cat /etc/iscsi/initiatorname.iscsi
+    4  iscsiadm -m discovery -t st -p 192.168.144.236
+    5  lsblk
+    6  iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.iscsi.x8664:sn.21f2f1d90530 192.168.144.236 -l
+    7  lsblk
+    8  pvscan
+    9  vgscan
+   10  lvscan
+   11  lvdisplay /dev/vg_apache/lv_apache
+   12  vgscan
+   13  lsblk
+   14  pvscan
+   15  vgscan
+   16  lvscan
+   17  lsblk
+   18  pvscan vg_apache
+   19  pvscan
+   20  vgscan
+   21  iscsiadm --mode node -R
+   22  pvscan
+   23  lsblk
+   24  systemctl restart lvm2-lvmetad.service
+   25  pvscan
+   26  vgscan
+   27  lvscan
+   28  lvdisplay /dev/vg_apache/lv_apache
+   29  yum config-manager --set-enabled HighAvailability
+   30  systemctl restart lvm2-lvmetad.service
+   31  yum config-manager --set-enabled HighAvailability
+   32  vi /etc/yum/pluginconf.d/fastestmirror.conf
+   33  yum config-manager --set-enabled HighAvailability
+   34  vi /etc/yum/pluginconf.d/fastestmirror.conf
+   35  yum update -y
+   36  yum config-manager --set-enabled HighAvailability
+   37  yum install yum-utils
+   38  yum config-manager --set-enabled HighAvailability
+   39  yum-config-manager --enable HighAvailability
+   40  yum config-manager --set-enabled HighAvailability
+   41  yum config-manager --set-enable HighAvailability
+   42  vi /etc/yum.conf
+   43  yum config-manager --set-enable HighAvailability
+   44  vi /etc/yum.conf
+   45  yum-config-manager --enable HighAvailability
+   46   yum install -y pcs fence-agents-all pcp-zeroconf
+   47  firewall-cmd --permanent -add-service=high-availability
+   48  firewall-cmd man
+   49  firewall-cmd --permanent -add-service=high-availability
+   50  firewall-cmd --permanent --add-service=high-availability
+   51  firewall-cmd --add-service=high-availability
+   52  firewall-cmd --reload
+   53  passwd hacluster
+   54  systemctl start pcsd
+   55  systemctl enable pcsd
+   56  yum install -y httpd
+   57  vi /etc/httpd/conf/httpd.conf
+   58  /bin/systemctl reload httpd.service > /dev/null 2>/dev/null || true
+   59  /usr/sbin/httpd -f /etc/httpd/conf/httpd.conf -c "PidFile /var/run/httpd.pid" -k graceful > /dev/null 2>/dev/null || true
+   60  firewall-cmd --permanent --add-service=http
+   61  firewall-cmd --reload
+   62  pcs resource create httpd_fs Filesystem device="/dev/mapper/vg_apache-lv_apache" directory="/var/www" fstype="ext4" --group apache
+   63  pcs resource remove httpd_fs Filesystem device="/dev/mapper/vg_apache-lv_apache" directory="/var/www" fstype="ext4" --group apache
